@@ -1,11 +1,14 @@
-# 告诉服务器，我们需要一个安装了Node.js 22的环境
-FROM node:22-slim
+# 使用更小的基础镜像以减少内存占用
+FROM node:22-alpine
 
-# 在服务器里更新软件列表，并安装一个叫curl的小工具
-RUN apt-get update && apt-get install -y curl
+# 安装必要的依赖（alpine系统使用apk）
+RUN apk add --no-cache curl
 
-# 运行Clawdbot官方的安装脚本
+# 关键修复：设置环境变量，禁止安装后自动进入交互式配置
+ENV CLAWDBOT_SKIP_POST_INSTALL=1
+
+# 运行官方安装脚本（现在它会跳过“Starting setup...”）
 RUN curl -fsSL https://clawd.bot/install.sh | bash
 
-# 告诉服务器，当这个容器启动时，自动运行clawdbot网关服务，并监听所有网络请求
+# 明确指定clawdbot的完整路径作为入口点
 ENTRYPOINT ["/root/.local/share/clawdbot/bin/clawdbot", "gateway", "--host", "0.0.0.0"]
