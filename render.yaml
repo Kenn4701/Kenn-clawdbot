@@ -5,5 +5,3 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
-    # 重要：已移除免费的 ‘disk’ 配置块
-    # 免费套餐不支持挂载磁盘，我们先去掉它让服务能启动
