@@ -1,0 +1,15 @@
+# 这是给Render云平台看的部署配置
+services:
+  - type: web  # 类型是一个Web服务
+    name: clawdbot-on-render  # 给你的服务起个名字，可以改成你喜欢的
+    env: docker  # 使用Docker方式部署
+    plan: free  # 使用免费套餐
+    dockerfilePath: ./Dockerfile  # 使用我们上面写的Dockerfile作为蓝图
+    autoDeploy: true  # 当代码有更新时自动重新部署
+    envVars:  # 设置一个环境变量，告诉Clawdbot数据存哪里
+      - key: CLAWDBOT_DATA_DIR
+        value: /data
+    disk:  # 挂载一个磁盘，非常重要！这样你的配置和聊天记录才不会丢失！
+      name: clawdbot-data
+      mountPath: /data  # 数据保存在这个目录
+      sizeGB: 1  # 分配1GB的免费存储空间，完全够用
